@@ -7,9 +7,10 @@
 ### 关键点
 
 - `vite@8` 需要 Node.js `22.12+` 或更新版本。
-- GitHub Actions 环境下，Vite 会根据 `GITHUB_REPOSITORY` 自动推导 `base` 路径。
-- 路由默认使用 `HashRouter`，避免刷新子路径 404。
-- `public/404.html` 作为额外兜底入口。
+- 默认构建 `base` 为 `/`，适配自定义域名根路径部署（例如 `https://f4d.gxfeng.xyz/`）。
+- 若需要仓库子路径部署（例如 `https://<user>.github.io/f4d/`），可在构建前设置 `PAGES_USE_REPO_BASE=true`，或直接设置 `PAGES_BASE_PATH=/f4d/`。
+- 路由默认使用 `BrowserRouter`（history 路由）。
+- `public/404.html` 会把 GitHub Pages 的 404 路径回跳到应用入口，并通过 `redirect` 参数恢复原始路由。
 - GitHub Pages 默认使用 HTTPS，满足 PWA 安装前提。
 
 ## 自动部署

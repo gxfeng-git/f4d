@@ -18,7 +18,7 @@
 - `/transactions`
 - `/data-sources`
 
-GitHub Pages 默认使用 `HashRouter`，因此部署后页面路径形式为 `/#/dashboard`。
+应用默认使用 `BrowserRouter`（history 路由）。GitHub Pages 刷新深层路由时，通过 `public/404.html` 将地址回跳到应用入口并恢复原始路径。
 
 ## 响应式外壳
 

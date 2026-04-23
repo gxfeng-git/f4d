@@ -3,10 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting...</title>
+    <title>Redirecting…</title>
     <script>
-      const base = location.pathname.replace(/404\.html$/, '');
-      location.replace(`${base}#/dashboard`);
+      (function () {
+        const segments = location.pathname.split('/').filter(Boolean);
+        const isGithubIoHost = location.hostname.endsWith('.github.io');
+        const base = isGithubIoHost && segments.length > 0 ? `/${segments[0]}/` : '/';
+        var attemptedPath = location.pathname;
+        if (!isGithubIoHost && (attemptedPath === '/f4d' || attemptedPath.indexOf('/f4d/') === 0)) {
+          attemptedPath = attemptedPath.slice('/f4d'.length) || '/';
+        }
+        const attempted = `${attemptedPath}${location.search}${location.hash}`;
+        const target = `${location.origin}${base}?redirect=${encodeURIComponent(attempted)}`;
+        location.replace(target);
+      })();
     </script>
   </head>
   <body></body>

@@ -16,7 +16,7 @@
 
 ## Key Decisions
 
-- `HashRouter` 作为默认路由，兼容 GitHub Pages。
+- `BrowserRouter`（history 路由）作为默认路由，并使用 `404.html` 回跳方案兼容 GitHub Pages。
 - 数据库存储拆分为 `app-shell-db` 与 `ledger-db`。
 - 导入 JSON 时支持：
   - 作为新数据源导入

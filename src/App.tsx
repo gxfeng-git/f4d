@@ -1,4 +1,4 @@
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { DashboardPage } from './pages/DashboardPage';
 import { AccountsPage } from './pages/AccountsPage';
@@ -7,6 +7,7 @@ import { LoansPage } from './pages/LoansPage';
 import { TransactionsPage } from './pages/TransactionsPage';
 import { DataSourcesPage } from './pages/DataSourcesPage';
 import { useAppContext } from './store/AppContext';
+import { getBaseUrl } from './lib/pwa';
 
 function LoadingScreen() {
   return (
@@ -81,7 +82,7 @@ export default function App() {
   }
 
   return (
-    <HashRouter>
+    <BrowserRouter basename={getBaseUrl()}>
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -93,6 +94,6 @@ export default function App() {
           <Route path="/data-sources" element={<DataSourcesPage />} />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
