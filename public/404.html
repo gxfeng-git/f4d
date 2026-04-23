@@ -9,11 +9,7 @@
         const segments = location.pathname.split('/').filter(Boolean);
         const isGithubIoHost = location.hostname.endsWith('.github.io');
         const base = isGithubIoHost && segments.length > 0 ? `/${segments[0]}/` : '/';
-        var attemptedPath = location.pathname;
-        if (!isGithubIoHost && (attemptedPath === '/f4d' || attemptedPath.indexOf('/f4d/') === 0)) {
-          attemptedPath = attemptedPath.slice('/f4d'.length) || '/';
-        }
-        const attempted = `${attemptedPath}${location.search}${location.hash}`;
+        const attempted = `${location.pathname}${location.search}${location.hash}`;
         const target = `${location.origin}${base}?redirect=${encodeURIComponent(attempted)}`;
         location.replace(target);
       })();
