@@ -13,6 +13,15 @@ const navItems = [
   { to: '/data-sources', label: '数据源' }
 ];
 
+const EMPTY_SOURCE_REDIRECT_PATHS = new Set([
+  '/',
+  '/dashboard',
+  '/accounts',
+  '/debts',
+  '/loans',
+  '/transactions'
+]);
+
 export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,7 +32,7 @@ export function AppShell() {
       return;
     }
 
-    if (sources.length === 0 && location.pathname !== '/data-sources') {
+    if (sources.length === 0 && EMPTY_SOURCE_REDIRECT_PATHS.has(location.pathname)) {
       navigate('/data-sources', { replace: true });
     }
   }, [bootStatus, location.pathname, navigate, sources.length]);

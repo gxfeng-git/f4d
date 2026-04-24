@@ -6,6 +6,7 @@ import { DebtsPage } from './pages/DebtsPage';
 import { LoansPage } from './pages/LoansPage';
 import { TransactionsPage } from './pages/TransactionsPage';
 import { DataSourcesPage } from './pages/DataSourcesPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { useAppContext } from './store/AppContext';
 import { getBaseUrl } from './lib/pwa';
 
@@ -92,6 +93,7 @@ export default function App() {
           <Route path="/loans" element={<LoansPage />} />
           <Route path="/transactions" element={<TransactionsPage />} />
           <Route path="/data-sources" element={<DataSourcesPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
