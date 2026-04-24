@@ -42,24 +42,23 @@ export default defineConfig({
         start_url: base,
         scope: base,
         display: 'standalone',
-        display_override: ['standalone', 'browser'],
         lang: 'zh-CN',
         orientation: 'portrait-primary',
         theme_color: '#0f172a',
         background_color: '#f8fafc',
         icons: [
           {
-            src: `${base}pwa-192x192.png`,
+            src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: `${base}pwa-512x512.png`,
+            src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: `${base}maskable-icon-512x512.png`,
+            src: 'maskable-icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
@@ -68,6 +67,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//]
       },
       devOptions: {

@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles/app.css';
 import { AppProvider } from './store/AppContext';
+import { initVConsole } from './vconsoleInit';
+
+initVConsole();
 
 function restoreRedirectedPath(): void {
   const url = new URL(window.location.href);
