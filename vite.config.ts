@@ -34,6 +34,7 @@ export default defineConfig({
       registerType: 'prompt',
       injectRegister: 'auto',
       includeAssets: ['apple-touch-icon.png', 'favicon.svg', '404.html'],
+      manifestFilename: 'manifest.json',
       manifest: {
         id: 'ledger-pwa',
         name: '多数据源账务助手',

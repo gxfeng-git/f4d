@@ -27,7 +27,7 @@
 
 如果仍不符合预期，优先检查：
 
-- 站点是否为 HTTPS，且 `manifest.webmanifest` 能 200 打开。
+- 站点是否为 HTTPS，且 `manifest.json` 能 200 打开。
 - 图标是否可访问（至少 192/512，并包含 `maskable`）。
 - 是否刚刚切换过域名或 `manifest.id`：已安装实例可能缓存旧配置，建议删除桌面图标后重新安装。
 
