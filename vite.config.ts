@@ -35,13 +35,16 @@ export default defineConfig({
       injectRegister: 'auto',
       includeAssets: ['apple-touch-icon.png', 'favicon.svg', '404.html'],
       manifest: {
-        id: base,
+        id: 'ledger-pwa',
         name: '多数据源账务助手',
         short_name: '账务助手',
         description: '纯前端、多数据源、本地持久化的账务与贷款管理应用',
         start_url: base,
         scope: base,
         display: 'standalone',
+        display_override: ['standalone', 'browser'],
+        lang: 'zh-CN',
+        orientation: 'portrait-primary',
         theme_color: '#0f172a',
         background_color: '#f8fafc',
         icons: [
