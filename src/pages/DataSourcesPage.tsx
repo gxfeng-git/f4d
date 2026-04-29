@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +27,7 @@ export function DataSourcesPage() {
     importFromText,
     importFromUrl
   } = useAppContext();
+  const navigate = useNavigate();
   const [createName, setCreateName] = useState('');
   const [renameTarget, setRenameTarget] = useState('');
   const [renameName, setRenameName] = useState('');
@@ -53,6 +55,7 @@ export function DataSourcesPage() {
               event.preventDefault();
               await createEmptySource(createName);
               setCreateName('');
+              navigate('/dashboard');
             }}
           >
             <Input
@@ -197,6 +200,9 @@ export function DataSourcesPage() {
                 setFileText('');
                 setNewSourceName('');
                 setTargetSourceId('');
+                if (importMode === 'create') {
+                  navigate('/dashboard');
+                }
               }}
             >
               导入文件
@@ -211,6 +217,28 @@ export function DataSourcesPage() {
               value={urlValue}
               onChange={(event) => setUrlValue(event.target.value)}
             />
+            <div
+              className={cn(
+                'inline-flex w-full max-w-md overflow-hidden rounded-lg border border-[#d2d2d7] bg-[#fafafc] p-0.5 dark:border-[#424245] dark:bg-[#1d1d1f]'
+              )}
+            >
+              <Button
+                type="button"
+                className="flex-1 rounded-md"
+                variant={importMode === 'create' ? 'default' : 'ghost'}
+                onClick={() => setImportMode('create')}
+              >
+                新建
+              </Button>
+              <Button
+                type="button"
+                className="flex-1 rounded-md"
+                variant={importMode === 'overwrite' ? 'default' : 'ghost'}
+                onClick={() => setImportMode('overwrite')}
+              >
+                覆盖
+              </Button>
+            </div>
             {importMode === 'create' ? (
               <Input
                 placeholder="新数据源名称"
@@ -259,6 +287,9 @@ export function DataSourcesPage() {
                   originLabel: urlValue
                 });
                 setUrlValue('');
+                if (importMode === 'create') {
+                  navigate('/dashboard');
+                }
               }}
             >
               从链接导入
