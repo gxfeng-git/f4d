@@ -11,7 +11,6 @@ import {
 } from './NavIcons';
 import { SourceSwitcher } from './SourceSwitcher';
 import { useAppContext } from '../store/AppContext';
-import { UpdatePrompt } from './UpdatePrompt';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
@@ -110,7 +109,7 @@ function ThemeField() {
 export function AppShell() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { appState, bootStatus, currentSource, isStandalone, sources } = useAppContext();
+  const { appState, bootStatus, currentSource, sources } = useAppContext();
   const pathname = location.pathname;
 
   useEffect(() => {
@@ -126,8 +125,7 @@ export function AppShell() {
   return (
     <SidebarProvider
       className={cn(
-        'mx-auto min-h-svh w-full max-w-[100rem] bg-background px-3 py-3 sm:px-4 sm:py-4 md:gap-4 md:px-6 md:py-5 lg:px-8',
-        isStandalone && 'pb-safe'
+        'mx-auto min-h-svh w-full max-w-[100rem] bg-background px-3 py-3 sm:px-4 sm:py-4 md:gap-4 md:px-6 md:py-5 lg:px-8'
       )}
     >
       <Sidebar
@@ -139,14 +137,14 @@ export function AppShell() {
           <div className="flex items-center gap-3 px-1">
             <IconAppMark />
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Ledger PWA</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">账本</p>
               <h1 className="text-[17px] font-semibold leading-tight tracking-tight text-foreground">
                 多数据源账务
               </h1>
             </div>
           </div>
           <p className="px-1 text-xs leading-relaxed text-muted-foreground">
-            本地离线、多账本。安装到桌面以 standalone 全屏使用。
+            本地离线、多账本管理。
           </p>
         </SidebarHeader>
         <SidebarContent className="gap-3 pt-2">
@@ -177,7 +175,6 @@ export function AppShell() {
           <Outlet />
         </div>
       </SidebarInset>
-      <UpdatePrompt />
       {appState?.activeSourceId === null ? (
         <div className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-card/95 px-4 py-3 text-center text-xs text-muted-foreground backdrop-blur-sm md:hidden">
           请先创建或导入一个数据源

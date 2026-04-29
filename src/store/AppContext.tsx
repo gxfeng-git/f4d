@@ -2,11 +2,9 @@ import {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
   type PropsWithChildren
 } from 'react';
-import { getStandaloneMode } from '../lib/pwa';
 import {
   adjustBalance,
   createAccount,
@@ -50,7 +48,6 @@ interface AppContextValue {
   appState: AppState | null;
   currentSource: DataSourceMeta | null;
   currentData: SourceLedgerData | null;
-  isStandalone: boolean;
   retryBootstrap: () => Promise<void>;
   refresh: () => Promise<void>;
   setTheme: (theme: ThemeMode) => Promise<void>;
@@ -89,7 +86,6 @@ export function AppProvider({ children }: PropsWithChildren) {
   const [sources, setSources] = useState<DataSourceMeta[]>([]);
   const [appState, setAppStateState] = useState<AppState | null>(null);
   const [currentData, setCurrentData] = useState<SourceLedgerData | null>(null);
-  const standaloneRef = useRef(getStandaloneMode());
 
   async function loadAll(): Promise<void> {
     const nextAppState = await getAppState();
@@ -238,7 +234,6 @@ export function AppProvider({ children }: PropsWithChildren) {
     appState,
     currentSource,
     currentData,
-    isStandalone: standaloneRef.current,
     retryBootstrap: bootstrap,
     refresh,
     setTheme,

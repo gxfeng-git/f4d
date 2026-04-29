@@ -9,7 +9,6 @@ import { TransactionsPage } from './pages/TransactionsPage';
 import { DataSourcesPage } from './pages/DataSourcesPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { useAppContext } from './store/AppContext';
-import { getBaseUrl } from './lib/pwa';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -102,7 +101,7 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter basename={getBaseUrl()}>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route element={<AppShell />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
