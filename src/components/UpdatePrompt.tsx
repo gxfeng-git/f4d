@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CHANNEL_NAME = 'ledger-pwa-updates';
 
@@ -51,21 +53,23 @@ export function UpdatePrompt() {
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto w-full max-w-lg rounded-3xl border border-primary/20 bg-base-100 p-5 shadow-2xl">
-        <div className="space-y-2">
-          <h3 className="text-lg font-semibold">新版本已可用</h3>
-          <p className="text-sm leading-6 text-base-content/70">
-            更新只会刷新前端静态资源，不会清除本地数据源和账务数据。若当前表单有未提交内容，刷新后仍可能丢失未保存输入。
-          </p>
-        </div>
-        <div className="mt-4 flex flex-wrap justify-end gap-3">
-          <button className="btn btn-ghost" onClick={() => setDismissed(true)}>
+      <Card className="pointer-events-auto w-full max-w-md border-[#d2d2d7] bg-card shadow-[0_8px_24px_-12px_rgba(0,0,0,0.18)] dark:border-[#424245] dark:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.45)]">
+        <CardHeader className="pb-2">
+          <CardTitle className="font-display text-base">新版本已可用</CardTitle>
+          <CardDescription className="text-[17px]">
+            将刷新前端资源，不删除本地数据。未提交的表单可能在刷新后丢失。
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap justify-end gap-2 pt-0">
+          <Button type="button" variant="ghost" size="sm" className="rounded-lg" onClick={() => setDismissed(true)}>
             稍后再说
-          </button>
-          <button
-            className="btn btn-primary"
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            className="rounded-lg"
             onClick={() => {
-              const confirmed = window.confirm('确认立即更新吗？未提交的表单输入可能会丢失，但本地数据不会被清除。');
+              const confirmed = window.confirm('确认立即更新？未保存的输入可能丢失。');
               if (!confirmed) {
                 return;
               }
@@ -75,9 +79,9 @@ export function UpdatePrompt() {
             }}
           >
             立即更新
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

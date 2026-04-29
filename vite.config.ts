@@ -1,3 +1,5 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -22,11 +24,18 @@ const useRepoBase = process.env.PAGES_USE_REPO_BASE === 'true';
 const base = envBase
   ? normalizeBase(envBase)
   : isPagesBuild && useRepoBase
-    ? repoBase
-    : '/';
+  ? repoBase
+  : '/';
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   base,
+  resolve: {
+    alias: {
+      '@': path.join(projectRoot, 'src')
+    }
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -45,12 +54,17 @@ export default defineConfig({
         display: 'standalone',
         lang: 'zh-CN',
         orientation: 'portrait-primary',
-        theme_color: '#0f172a',
-        background_color: '#f8fafc',
+        theme_color: '#0d5c4d',
+        background_color: '#faf8f4',
         icons: [
           {
             src: `${base}pwa-192x192.png`,
             sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: `${base}pwa-216x216.png`,
+            sizes: '216x216',
             type: 'image/png'
           },
           {

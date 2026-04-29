@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
 
@@ -6,21 +7,25 @@ export function NotFoundPage() {
   const location = useLocation();
 
   return (
-    <div className="space-y-6">
-      <PageHeading title="页面不存在" description="你访问的路径在当前应用中不存在。" />
-      <SectionCard title="404" description="请检查链接是否正确，或返回首页继续操作。">
-        <p className="text-sm text-base-content/70">
-          当前路径：<span className="font-mono text-base-content">{location.pathname}</span>
-        </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Link className="btn btn-primary" to="/dashboard">
-            返回看板
-          </Link>
-          <Link className="btn btn-outline" to="/data-sources">
-            数据源管理
-          </Link>
-        </div>
-      </SectionCard>
+    <div className="flex flex-col gap-4 md:gap-6">
+      <section className="rounded-[28px] bg-[#f5f5f7] px-4 py-8 dark:bg-[#272729] sm:px-6">
+        <PageHeading title="页面不存在" description="你访问的路径不在应用路由中。" />
+      </section>
+      <section className="rounded-[28px] bg-white px-4 py-8 dark:bg-card sm:px-6">
+        <SectionCard title="404" description="检查链接或返回首页。">
+          <p className="text-[17px] text-muted-foreground">
+            路径 <span className="ui-mono font-medium text-foreground">{location.pathname}</span>
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button asChild className="rounded-lg">
+              <Link to="/dashboard">看板</Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-lg">
+              <Link to="/data-sources">数据源</Link>
+            </Button>
+          </div>
+        </SectionCard>
+      </section>
     </div>
   );
 }

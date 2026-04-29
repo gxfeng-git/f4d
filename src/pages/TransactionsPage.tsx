@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { EmptyState } from '../components/EmptyState';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
-import { toDateLabel } from '../lib/date';
+import { toDateLabel, todayIsoDate } from '../lib/date';
 import { formatSignedCurrency } from '../lib/format';
-import { todayIsoDate } from '../lib/date';
 import { useAppContext } from '../store/AppContext';
 
 export function TransactionsPage() {
@@ -17,121 +21,145 @@ export function TransactionsPage() {
     note: ''
   });
 
-  const transactions = [...(currentData?.transactions ?? [])].sort((left, right) => right.occurredAt.localeCompare(left.occurredAt));
+  const transactions = [...(currentData?.transactions ?? [])].sort((left, right) =>
+    right.occurredAt.localeCompare(left.occurredAt)
+  );
 
   return (
-    <div className="space-y-6">
-      <PageHeading title="流水" description="手工记账与系统流水都会汇总在这里，所有金额都只作用于当前激活的数据源。" />
+    <div className="flex flex-col gap-4 md:gap-6">
+      <section className="rounded-[28px] bg-[#f5f5f7] px-4 py-8 dark:bg-[#272729] sm:px-6">
+        <PageHeading title="流水" description="手工与系统流水均在此；金额仅影响当前数据源。" />
+      </section>
 
-      <SectionCard title="新增手工流水" description="收入记为正向流入，支出记为负向流出。">
-        <form
-          className="grid gap-4 md:grid-cols-2"
-          onSubmit={async (event) => {
-            event.preventDefault();
-            await createManualTransactionEntry({
-              accountId: form.accountId,
-              title: form.title,
-              amount: Number(form.amount),
-              direction: form.direction,
-              occurredAt: form.occurredAt,
-              note: form.note
-            });
-            setForm({
-              accountId: '',
-              title: '',
-              amount: '',
-              direction: 'out',
-              occurredAt: todayIsoDate(),
-              note: ''
-            });
-          }}
-        >
-          <select
-            className="select select-bordered"
-            value={form.accountId}
-            onChange={(event) => setForm((prev) => ({ ...prev, accountId: event.target.value }))}
-            required
+      <section className="rounded-[28px] bg-white px-4 py-8 dark:bg-card sm:px-6">
+        <SectionCard title="新增手工流水" description="收入为流入，支出为流出。">
+          <form
+            className="grid gap-3 md:grid-cols-2"
+            onSubmit={async (event) => {
+              event.preventDefault();
+              await createManualTransactionEntry({
+                accountId: form.accountId,
+                title: form.title,
+                amount: Number(form.amount),
+                direction: form.direction,
+                occurredAt: form.occurredAt,
+                note: form.note
+              });
+              setForm({
+                accountId: '',
+                title: '',
+                amount: '',
+                direction: 'out',
+                occurredAt: todayIsoDate(),
+                note: ''
+              });
+            }}
           >
-            <option value="" disabled>
-              选择账户
-            </option>
-            {currentData?.accounts.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.name}
-              </option>
-            ))}
-          </select>
-          <input
-            className="input input-bordered"
-            placeholder="流水标题"
-            value={form.title}
-            onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
-            required
-          />
-          <input
-            className="input input-bordered"
-            type="number"
-            step="0.01"
-            placeholder="金额"
-            value={form.amount}
-            onChange={(event) => setForm((prev) => ({ ...prev, amount: event.target.value }))}
-            required
-          />
-          <select
-            className="select select-bordered"
-            value={form.direction}
-            onChange={(event) => setForm((prev) => ({ ...prev, direction: event.target.value as 'in' | 'out' }))}
-          >
-            <option value="in">收入</option>
-            <option value="out">支出</option>
-          </select>
-          <input
-            className="input input-bordered"
-            type="date"
-            value={form.occurredAt}
-            onChange={(event) => setForm((prev) => ({ ...prev, occurredAt: event.target.value }))}
-            required
-          />
-          <input
-            className="input input-bordered"
-            placeholder="备注（可选）"
-            value={form.note}
-            onChange={(event) => setForm((prev) => ({ ...prev, note: event.target.value }))}
-          />
-          <button className="btn btn-primary md:col-span-2">新增流水</button>
-        </form>
-      </SectionCard>
+            <Select
+              value={
+                form.accountId && currentData?.accounts.some((a) => a.id === form.accountId)
+                  ? form.accountId
+                  : undefined
+              }
+              onValueChange={(v) => setForm((p) => ({ ...p, accountId: v }))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="选择账户" />
+              </SelectTrigger>
+              <SelectContent>
+                {currentData?.accounts.map((account) => (
+                  <SelectItem key={account.id} value={account.id}>
+                    {account.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              placeholder="标题"
+              value={form.title}
+              onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
+              required
+            />
+            <Input
+              type="number"
+              step="0.01"
+              placeholder="金额"
+              value={form.amount}
+              onChange={(event) => setForm((prev) => ({ ...prev, amount: event.target.value }))}
+              required
+            />
+            <Select
+              value={form.direction}
+              onValueChange={(v) => setForm((prev) => ({ ...prev, direction: v as 'in' | 'out' }))}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="in">收入</SelectItem>
+                <SelectItem value="out">支出</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="date"
+              value={form.occurredAt}
+              onChange={(event) => setForm((prev) => ({ ...prev, occurredAt: event.target.value }))}
+              required
+            />
+            <Input
+              className="md:col-span-2"
+              placeholder="备注（可选）"
+              value={form.note}
+              onChange={(event) => setForm((prev) => ({ ...prev, note: event.target.value }))}
+            />
+            <Button type="submit" className="w-full rounded-lg md:col-span-2">
+              新增流水
+            </Button>
+          </form>
+        </SectionCard>
+      </section>
 
-      <SectionCard title="流水列表" description="系统生成的借款、贷款和余额调整流水会带有系统标记。">
-        <div className="space-y-3">
-          {transactions.length === 0 ? (
-            <div className="rounded-2xl bg-base-200/60 p-4 text-sm text-base-content/70">暂无流水。</div>
-          ) : (
-            transactions.map((transaction) => {
-              const account = currentData?.accounts.find((item) => item.id === transaction.accountId);
-              return (
-                <div key={transaction.id} className="rounded-2xl border border-base-200 p-4">
-                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <div>
+      <section className="rounded-[28px] bg-[#f5f5f7] px-4 py-8 dark:bg-[#272729] sm:px-6">
+        <SectionCard title="流水列表" description="系统类流水会标注「系统」。">
+          <div className="space-y-2.5">
+            {transactions.length === 0 ? (
+              <EmptyState>暂无流水。</EmptyState>
+            ) : (
+              transactions.map((transaction) => {
+                const account = currentData?.accounts.find((item) => item.id === transaction.accountId);
+                return (
+                  <div
+                    key={transaction.id}
+                    className="ui-list-row !flex-col !items-stretch gap-2 sm:!flex-row sm:!items-center"
+                  >
+                    <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <p className="font-medium">{transaction.title}</p>
-                        {transaction.isSystem ? <span className="badge badge-outline">系统</span> : null}
+                        {transaction.isSystem ? (
+                          <Badge variant="secondary" className="text-[10px] font-semibold">
+                            系统
+                          </Badge>
+                        ) : null}
                       </div>
-                      <p className="text-sm text-base-content/60">
-                        {account?.name ?? '未知账户'} · {toDateLabel(transaction.occurredAt)}
+                      <p className="text-xs text-muted-foreground">
+                        {account?.name ?? '未知'} · {toDateLabel(transaction.occurredAt)}
                       </p>
-                      {transaction.note ? <p className="mt-1 text-sm text-base-content/70">{transaction.note}</p> : null}
+                      {transaction.note ? <p className="mt-1 text-[17px] text-muted-foreground">{transaction.note}</p> : null}
                     </div>
-                    <p className={`text-lg font-semibold ${transaction.amountDelta >= 0 ? 'text-success' : 'text-error'}`}>
+                    <p
+                      className={`font-display shrink-0 text-lg font-semibold tabular-nums ${
+                        transaction.amountDelta >= 0 ? 'text-success' : 'text-destructive'
+                      }`}
+                    >
                       {formatSignedCurrency(transaction.amountDelta)}
                     </p>
                   </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </SectionCard>
+                );
+              })
+            )}
+          </div>
+        </SectionCard>
+      </section>
     </div>
   );
 }

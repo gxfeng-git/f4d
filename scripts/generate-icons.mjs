@@ -113,6 +113,7 @@ function createPng(size, filename, options = {}) {
 }
 
 createPng(192, 'pwa-192x192.png');
+createPng(216, 'pwa-216x216.png');
 createPng(512, 'pwa-512x512.png');
 createPng(512, 'maskable-icon-512x512.png', {
   background: [2, 6, 23, 255],
