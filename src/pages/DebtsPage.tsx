@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
 import { EmptyState } from '../components/EmptyState';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
@@ -109,11 +110,9 @@ export function DebtsPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Input
-                type="date"
+              <DatePicker
                 value={createForm.startedAt}
-                onChange={(event) => setCreateForm((prev) => ({ ...prev, startedAt: event.target.value }))}
-                required
+                onChange={(v) => setCreateForm((prev) => ({ ...prev, startedAt: v }))}
               />
               <Textarea className="min-h-24" placeholder="备注（可选）" value={createForm.note} onChange={(e) => setCreateForm((p) => ({ ...p, note: e.target.value }))} />
               <Button type="submit" className="w-full rounded-lg sm:w-auto">
@@ -191,11 +190,9 @@ export function DebtsPage() {
                 onChange={(e) => setRepaymentForm((p) => ({ ...p, amount: e.target.value }))}
                 required
               />
-              <Input
-                type="date"
+              <DatePicker
                 value={repaymentForm.occurredAt}
-                onChange={(e) => setRepaymentForm((p) => ({ ...p, occurredAt: e.target.value }))}
-                required
+                onChange={(v) => setRepaymentForm((p) => ({ ...p, occurredAt: v }))}
               />
               <Textarea className="min-h-24" placeholder="备注（可选）" value={repaymentForm.note} onChange={(e) => setRepaymentForm((p) => ({ ...p, note: e.target.value }))} />
               <Button type="submit" variant="dark" className="w-full rounded-lg sm:w-auto">

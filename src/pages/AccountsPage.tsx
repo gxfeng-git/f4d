@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, type ComponentType, type SVGProps } from 'react';
+import { Banknote, CreditCard, Landmark, MoreHorizontal, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
 import { EmptyState } from '../components/EmptyState';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
@@ -12,23 +14,54 @@ import { getAccountBalances } from '../services/ledger';
 import { useAppContext } from '../store/AppContext';
 import type { Account } from '../types/models';
 
-const accountTypes: Account['type'][] = ['cash', 'bank', 'credit', 'asset', 'other'];
+type AccountTypeMeta = {
+  value: Account['type'];
+  label: string;
+  Icon: ComponentType<SVGProps<SVGSVGElement>>;
+};
+
+const accountTypes: AccountTypeMeta[] = [
+  { value: 'cash', label: '现金', Icon: Banknote },
+  { value: 'bank', label: '银行卡', Icon: Landmark },
+  { value: 'credit', label: '信用卡', Icon: CreditCard },
+  { value: 'asset', label: '资产', Icon: Wallet },
+  { value: 'other', label: '其他', Icon: MoreHorizontal }
+];
+
+const accountTypeMap = new Map(accountTypes.map((t) => [t.value, t]));
+
+function AccountTypeOption({ type }: { type: AccountTypeMeta }) {
+  const { Icon, label } = type;
+  return (
+    <span className="flex items-center gap-2">
+      <Icon className="size-4 text-muted-foreground" aria-hidden />
+      <span>{label}</span>
+    </span>
+  );
+}
 
 function AccountTypeSelect({ value, onChange }: { value: Account['type']; onChange: (v: Account['type']) => void }) {
+  const current = accountTypeMap.get(value) ?? accountTypes[0];
   return (
     <Select value={value} onValueChange={(v) => onChange(v as Account['type'])}>
       <SelectTrigger className="h-9 w-full">
-        <SelectValue />
+        <SelectValue>
+          <AccountTypeOption type={current} />
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {accountTypes.map((type) => (
-          <SelectItem key={type} value={type}>
-            {type}
+          <SelectItem key={type.value} value={type.value}>
+            <AccountTypeOption type={type} />
           </SelectItem>
         ))}
       </SelectContent>
     </Select>
   );
+}
+
+export function getAccountTypeLabel(type: Account['type']): string {
+  return accountTypeMap.get(type)?.label ?? type;
 }
 
 export function AccountsPage() {
@@ -129,11 +162,9 @@ export function AccountsPage() {
                 onChange={(event) => setAdjustmentForm((prev) => ({ ...prev, amountDelta: event.target.value }))}
                 required
               />
-              <Input
-                type="date"
+              <DatePicker
                 value={adjustmentForm.occurredAt}
-                onChange={(event) => setAdjustmentForm((prev) => ({ ...prev, occurredAt: event.target.value }))}
-                required
+                onChange={(v) => setAdjustmentForm((prev) => ({ ...prev, occurredAt: v }))}
               />
               <Textarea
                 className="min-h-24"
@@ -155,15 +186,24 @@ export function AccountsPage() {
             {balances.length === 0 ? (
               <EmptyState>还没有账户。</EmptyState>
             ) : (
-              balances.map((row) => (
-                <div key={row.account.id} className="ui-list-row !flex-row !items-center">
-                  <div>
-                    <p className="font-medium">{row.account.name}</p>
-                    <p className="text-xs text-muted-foreground">{row.account.type}</p>
+              balances.map((row) => {
+                const meta = accountTypeMap.get(row.account.type);
+                const Icon = meta?.Icon ?? MoreHorizontal;
+                return (
+                  <div key={row.account.id} className="ui-list-row !flex-row !items-center">
+                    <div className="flex items-center gap-3">
+                      <span className="flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+                        <Icon className="size-4" aria-hidden />
+                      </span>
+                      <div>
+                        <p className="font-medium">{row.account.name}</p>
+                        <p className="text-xs text-muted-foreground">{meta?.label ?? row.account.type}</p>
+                      </div>
+                    </div>
+                    <p className="font-display text-lg font-semibold tabular-nums">{formatCurrency(row.balance)}</p>
                   </div>
-                  <p className="font-display text-lg font-semibold tabular-nums">{formatCurrency(row.balance)}</p>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </SectionCard>

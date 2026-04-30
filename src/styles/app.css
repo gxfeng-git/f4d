@@ -336,3 +336,14 @@ html[data-theme='dark'] .ui-tile:hover {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

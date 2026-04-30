@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
 import { EmptyState } from '../components/EmptyState';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
@@ -164,11 +165,9 @@ export function LoansPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Input
-                type="date"
+              <DatePicker
                 value={loanForm.disbursedAt}
-                onChange={(e) => setLoanForm((p) => ({ ...p, disbursedAt: e.target.value }))}
-                required
+                onChange={(v) => setLoanForm((p) => ({ ...p, disbursedAt: v }))}
               />
               <Textarea
                 className="min-h-24"
@@ -260,11 +259,9 @@ export function LoansPage() {
                 onChange={(e) => setRepaymentForm((p) => ({ ...p, amount: e.target.value }))}
                 required
               />
-              <Input
-                type="date"
+              <DatePicker
                 value={repaymentForm.occurredAt}
-                onChange={(e) => setRepaymentForm((p) => ({ ...p, occurredAt: e.target.value }))}
-                required
+                onChange={(v) => setRepaymentForm((p) => ({ ...p, occurredAt: v }))}
               />
               <Textarea
                 className="min-h-20"

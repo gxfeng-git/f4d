@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
 import { EmptyState } from '../components/EmptyState';
 import { PageHeading } from '../components/PageHeading';
 import { SectionCard } from '../components/SectionCard';
@@ -100,11 +101,9 @@ export function TransactionsPage() {
                 <SelectItem value="out">支出</SelectItem>
               </SelectContent>
             </Select>
-            <Input
-              type="date"
+            <DatePicker
               value={form.occurredAt}
-              onChange={(event) => setForm((prev) => ({ ...prev, occurredAt: event.target.value }))}
-              required
+              onChange={(v) => setForm((prev) => ({ ...prev, occurredAt: v }))}
             />
             <Input
               className="md:col-span-2"

@@ -13,7 +13,7 @@ import type { ImportMode } from '../types/models';
 import { cn } from '@/lib/utils';
 
 const fileInputClass =
-  'flex h-9 w-full cursor-pointer rounded-lg border border-[#86868b] bg-background px-3 py-1.5 text-sm text-foreground shadow-none transition-[color,box-shadow] file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 dark:bg-transparent';
+  'flex h-9 w-full cursor-pointer items-center rounded-lg border border-[#86868b] bg-background px-3 py-0 text-sm leading-none text-foreground shadow-none transition-[color,box-shadow] file:mt-[3px] file:mb-[5px] file:mr-3 file:box-border file:inline-flex file:h-7 file:cursor-pointer file:items-center file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-0 file:align-middle file:text-sm file:font-medium file:leading-none file:text-primary-foreground hover:file:bg-primary/90 dark:bg-transparent';
 
 export function DataSourcesPage() {
   const {
